@@ -1,0 +1,111 @@
+
+CREATE TABLE User(
+    user_id INT(8) NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL,
+    PRIMARY KEY (user_id)
+);
+
+CREATE TABLE Student(
+    user_id INT(8) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+
+CREATE TABLE Teacher(
+    user_id INT(8) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
+);
+
+CREATE TABLE Course(
+    course_id INT(4) NOT NULL,
+    course_name TEXT,
+    PRIMARY KEY (course_id)
+);
+
+CREATE TABLE CourseSection(
+    section_id INT(2) NOT NULL,
+    course_id INT(4) NOT NULL,
+    teacher_id INT(8) NOT NULL,
+    section_name TEXT,
+    PRIMARY KEY (course_id, section_id),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id),
+    FOREIGN KEY (teacher_id) REFERENCES Teacher(user_id)
+);
+
+-- Course & section a student is enrolled in
+CREATE TABLE EnrolledIn(
+    student_id INT(8) NOT NULL,
+    course_id INT(4) NOT NULL,
+    section_id INT(2) NOT NULL,
+    PRIMARY KEY (student_id, course_id, section_id),
+    FOREIGN KEY (student_id) REFERENCES Student(user_id),
+    FOREIGN KEY (course_id) REFERENCES CourseSection(course_id),
+    FOREIGN KEY (section_id) REFERENCES CourseSection(section_id)
+);
+
+CREATE TABLE Assessment(
+    assessment_id INT(4) NOT NULL,
+    course_id INT(4) NOT NULL,
+    section_id INT(2) NOT NULL,
+    value INT(0,3),
+    PRIMARY KEY (assessment_id, course_id, section_id),
+    FOREIGN KEY (course_id) REFERENCES CourseSection(course_id),
+    FOREIGN KEY (section_id) REFERENCES CourseSection(section_id)
+);
+
+CREATE TABLE AssessmentGrade(
+    assessment_id INT(4) NOT NULL,
+    course_id INT(4) NOT NULL,
+    section_id INT(2) NOT NULL,
+    student_id INT(8) NOT NULL,
+    grade INT(0,3),
+    PRIMARY KEY (assessment_id, course_id, section_id, student_id),
+    FOREIGN KEY (assessment_id) REFERENCES Assessment(assessment_id),
+    FOREIGN KEY (course_id) REFERENCES CourseSection(course_id),
+    FOREIGN KEY (section_id) REFERENCES CourseSection(section_id),
+    FOREIGN KEY (student_id) REFERENCES Student(user_id)
+);
+
+-- DATA INSERTION --
+
+INSERT INTO User VALUES(10000000, 'john@doodle.ca', 'hunter1');
+INSERT INTO User VALUES(10000001, 'bill@doodle.ca', 'hunter2');
+INSERT INTO User VALUES(10000002, 'jane@doodle.ca', 'password');
+INSERT INTO User VALUES(10000003, 'phil@doodle.ca', 'what');
+INSERT INTO User VALUES(10000004, 'dunno@doodle.ca', 'dunno');
+
+INSERT INTO Student VALUES(10000000);
+INSERT INTO Student VALUES(10000001);
+INSERT INTO Student VALUES(10000002);
+
+INSERT INTO Teacher VALUES(10000003);
+INSERT INTO Teacher VALUES(10000004);
+
+INSERT INTO Course VALUES(0001, 'COMP-248');
+INSERT INTO Course VALUES(0002, 'COMP-249');
+INSERT INTO Course VALUES(0003, 'COMP-335');
+INSERT INTO Course VALUES(0004, 'ENCS-282');
+INSERT INTO Course VALUES(0005, 'SOEN-287');
+
+INSERT INTO CourseSection VALUES(01, 0001, 10000003, 'A');
+INSERT INTO CourseSection VALUES(02, 0001, 10000004, 'B');
+INSERT INTO CourseSection VALUES(01, 0002, 10000003, 'F');
+INSERT INTO CourseSection VALUES(01, 0003, 10000004, 'BB');
+INSERT INTO CourseSection VALUES(02, 0003, 10000003, 'X');
+INSERT INTO CourseSection VALUES(01, 0004, 10000003, 'A');
+INSERT INTO CourseSection VALUES(01, 0005, 10000004, 'Q');
+
+INSERT INTO EnrolledIn VALUES(10000000, 0001, 01);
+INSERT INTO EnrolledIn VALUES(10000000, 0002, 01);
+INSERT INTO EnrolledIn VALUES(10000000, 0003, 01);
+INSERT INTO EnrolledIn VALUES(10000000, 0004, 01);
+INSERT INTO EnrolledIn VALUES(10000001, 0001, 02);
+INSERT INTO EnrolledIn VALUES(10000001, 0003, 02);
+INSERT INTO EnrolledIn VALUES(10000002, 0001, 01);
+INSERT INTO EnrolledIn VALUES(10000002, 0003, 01);
+INSERT INTO EnrolledIn VALUES(10000002, 0005, 01);
+
+INSERT INTO Assessment VALUES(0001, 0001, 01, 100);
+
+INSERT INTO AssessmentGrade VALUES(0001, 0001, 01, 10000000, 70);
+INSERT INTO AssessmentGrade VALUES(0001, 0001, 01, 10000002, 55);

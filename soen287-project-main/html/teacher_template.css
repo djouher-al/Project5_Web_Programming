@@ -1,0 +1,10 @@
+html,body,#sidebarMainWrapper {
+  height: 100vh;
+}
+
+body{
+  padding-top: 58px;
+}
+hr{
+  margin: .5rem;
+}

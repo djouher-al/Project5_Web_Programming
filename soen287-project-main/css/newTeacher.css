@@ -1,0 +1,9 @@
+.footer{ float:clear; margin-top: 15%;   }
+
+
+*{font-family: Arial, Helvetica, sans-serif; color: black}
+.classes { padding-left: 15%;  }
+.semesters{padding-right: 10%;}
+.body {height: fit-content;}
+#line { color:black; font-weight: bold;}
+.footer{ background-color: #0d6efd ; color: white}

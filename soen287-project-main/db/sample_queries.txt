@@ -1,0 +1,22 @@
+-- Details of all students
+SELECT * FROM User;
+
+-- All teachers' emails
+SELECT email from User, Teacher
+WHERE (User.user_id = Teacher.user_id);
+
+-- All course names
+SELECT course_name from Course;
+
+-- Emails of students that attend COMP-248
+SELECT email from User, EnrolledIn, Course, CourseSection
+WHERE (Course.course_id = CourseSection.course_id)
+AND (EnrolledIn.section_id = CourseSection.section_id)
+AND (EnrolledIn.student_id = User.user_id)
+AND (Course.course_name = 'COMP-248');
+
+-- Teachers for each section of COMP-335
+SELECT email, section_name AS Section from User, Teacher, CourseSection
+WHERE (User.user_id = Teacher.user_id)
+AND (CourseSection.teacher_id = Teacher.user_id)
+AND (CourseSection.course_id = 003);
